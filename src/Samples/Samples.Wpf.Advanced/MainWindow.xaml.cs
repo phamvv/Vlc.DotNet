@@ -25,8 +25,10 @@ namespace Samples.Wpf.Advanced
             if (IntPtr.Size == 4)
                 vlcLibDirectory = new DirectoryInfo(Path.Combine(currentDirectory, @"..\..\..\..\..\lib\x86\"));
             else
-                vlcLibDirectory = new DirectoryInfo(Path.Combine(currentDirectory, @"..\..\..\..\..\lib\x64\"));
-
+                vlcLibDirectory = new DirectoryInfo(Path.Combine(currentDirectory, @"..\..\..\..\..\lib\x64\"));           
+        }
+        private void CreatePlayer()
+        {
             this.control?.Dispose();
             this.control = new VlcControl();
             this.control.Stretch = System.Windows.Media.Stretch.Fill;
@@ -39,7 +41,7 @@ namespace Samples.Wpf.Advanced
                 string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
                 System.Diagnostics.Debug.WriteLine(message);
             };
-            // this.control.SourceProvider.MediaPlayer.PositionChanged += MediaPlayer_PositionChanged;
+            this.control.SourceProvider.MediaPlayer.PositionChanged += MediaPlayer_PositionChanged;
             this.control.SourceProvider.MediaPlayer.TimeChanged += MediaPlayer_TimeChanged;
             this.control.SourceProvider.MediaPlayer.Paused += MediaPlayer_Paused;
             this.control.SourceProvider.MediaPlayer.Playing += MediaPlayer_Playing;
@@ -65,9 +67,9 @@ namespace Samples.Wpf.Advanced
 
         private void OnStopButtonClick(object sender, RoutedEventArgs e)
         {
-            //this.control?.Dispose();
-            //this.control = null;
-            this.control.SourceProvider.MediaPlayer.Stop();
+            this.control?.Dispose();
+            this.control = null;
+            //  this.control.SourceProvider.MediaPlayer.Stop(); // not work
         }
 
         private void bt_rateDown_Click(object sender, RoutedEventArgs e)
@@ -124,7 +126,13 @@ namespace Samples.Wpf.Advanced
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-            control.SourceProvider.MediaPlayer.Play(new Uri("F:\\bh1.mp4"));
+            if (this.control == null)
+                CreatePlayer();
+            var ofd = new Microsoft.Win32.OpenFileDialog() { Filter = "MP4 Files (*.mp4)|*.mp4|MKV Files (*.mkv)|*.mkv|AVI Files (*.avi)|*.avi|MP3 Files (*.mp3)|*.mp3" };
+            var result = ofd.ShowDialog();
+            if (result == false) return;
+          
+            this.control.SourceProvider.MediaPlayer.Play(new Uri(ofd.FileName));
         }
 
         private void MediaPlayer_TimeChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerTimeChangedEventArgs e)
