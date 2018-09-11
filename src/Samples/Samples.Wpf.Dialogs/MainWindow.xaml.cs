@@ -27,7 +27,7 @@ namespace Samples.Wpf.Dialogs
             //this.VlcControl.SourceProvider.MediaPlayer.Play(new Uri("http://httpbin.org/basic-auth/user/passwd"));
 
             // The following test URL displays an error dialog saying that the media could not be opened
-            this.VlcControl.SourceProvider.MediaPlayer.Play(new Uri("F:\\bh1.mp4"));
+            this.VlcControl.SourceProvider.MediaPlayer.Play(new Uri("http://127.0.0.1/NonExistentUrl"));
         }
     }
 }

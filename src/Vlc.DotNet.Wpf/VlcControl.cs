@@ -46,12 +46,6 @@ namespace Vlc.DotNet.Wpf
             this.videoContent.SetBinding(Image.SourceProperty, new Binding(nameof(VlcVideoSourceProvider.VideoSource)) { Source = sourceProvider });
         }
 
-        public Stretch Stretch
-        {
-            get { return this.viewBox.Stretch; }
-            set { this.viewBox.Stretch = value; }
-        }
-
         /// <inheritdoc />
         public void Dispose()
         {
